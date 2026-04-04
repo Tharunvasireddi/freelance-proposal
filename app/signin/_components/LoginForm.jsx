@@ -47,6 +47,7 @@ export default function LoginForm() {
         provider: "google",
         callbackURL: "/dashboard",
       });
+      console.log(response);
     } catch (error) {
       setMessage({
         type: "error",
@@ -104,7 +105,7 @@ export default function LoginForm() {
         name: signUpForm.name,
         email: signUpForm.email,
         password: signUpForm.password,
-        callbackURL: "/",
+        callbackURL: "/dashboard",
       });
 
       if (response?.error) {
@@ -122,7 +123,7 @@ export default function LoginForm() {
         type: "success",
         text: "Account created successfully. You are now signed in.",
       });
-      router.push("/");
+      router.push("/dashboard");
       router.refresh();
     } catch (error) {
       setMessage({
