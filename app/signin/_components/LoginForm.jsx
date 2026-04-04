@@ -57,6 +57,8 @@ export default function LoginForm() {
             "Google sign-in failed. Please try again.",
           ),
         });
+      } else {
+        router.push("/dashboard");
       }
     } catch (error) {
       setMessage({
@@ -90,9 +92,9 @@ export default function LoginForm() {
           ),
         });
         return;
+      } else {
+        router.push("/dashboard");
       }
-
-      router.push("/dashboard");
       router.refresh();
     } catch (error) {
       setMessage({
@@ -133,7 +135,6 @@ export default function LoginForm() {
         type: "success",
         text: "Account created successfully. You are now signed in.",
       });
-      router.push("/dashboard");
       router.refresh();
     } catch (error) {
       setMessage({
