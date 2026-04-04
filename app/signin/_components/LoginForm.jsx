@@ -43,11 +43,20 @@ export default function LoginForm() {
     try {
       setMessage(null);
       setIsGoogleLoading(true);
-      await authClient.signIn.social({
+      const response = await authClient.signIn.social({
         provider: "google",
         callbackURL: "/dashboard",
       });
-      console.log(response);
+
+      if (response?.error) {
+        setMessage({
+          type: "error",
+          text: getErrorMessage(
+            response,
+            "Google sign-in failed. Please try again.",
+          ),
+        });
+      }
     } catch (error) {
       setMessage({
         type: "error",
