@@ -47,6 +47,7 @@ export default function LoginForm() {
         provider: "google",
         callbackURL: "/dashboard",
       });
+      console.log(response);
 
       if (response?.error) {
         setMessage({
