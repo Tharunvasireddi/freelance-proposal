@@ -3,12 +3,11 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, LoaderCircle } from "lucide-react";
-import { FcGoogle } from "react-icons/fc";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
+import { FaGithub } from "react-icons/fa";
 const inputClassName =
   "h-11 w-full rounded-xl border border-white/15 bg-white/5 px-3 text-sm text-white placeholder:text-zinc-400 transition focus:border-white/40 focus:outline-none";
 
@@ -44,7 +43,7 @@ export default function LoginForm() {
       setMessage(null);
       setIsGoogleLoading(true);
       const response = await authClient.signIn.social({
-        provider: "google",
+        provider: "github",
         callbackURL: "/dashboard",
       });
       console.log(response);
@@ -54,7 +53,7 @@ export default function LoginForm() {
           type: "error",
           text: getErrorMessage(
             response,
-            "Google sign-in failed. Please try again.",
+            "Github sign-in failed. Please try again.",
           ),
         });
       } else {
@@ -344,8 +343,8 @@ export default function LoginForm() {
             </>
           ) : (
             <span className="flex items-center gap-2 text-white">
-              <FcGoogle className="h-5 w-5" />
-              Continue with Google
+              <FaGithub />
+              Continue with Github
             </span>
           )}
         </Button>
