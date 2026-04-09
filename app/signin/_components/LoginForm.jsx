@@ -7,7 +7,6 @@ import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FaGithub } from "react-icons/fa";
 const inputClassName =
   "h-11 w-full rounded-xl border border-white/15 bg-white/5 px-3 text-sm text-white placeholder:text-zinc-400 transition focus:border-white/40 focus:outline-none";
 
@@ -21,7 +20,6 @@ export default function LoginForm() {
   const [activeTab, setActiveTab] = useState("signin");
   const [message, setMessage] = useState(null);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
   const [signInForm, setSignInForm] = useState({
     email: "",
@@ -37,37 +35,6 @@ export default function LoginForm() {
   const submitLabel = useMemo(() => {
     return activeTab === "signin" ? "Sign in" : "Create account";
   }, [activeTab]);
-
-  const handleGoogleAuth = async () => {
-    try {
-      setMessage(null);
-      setIsGoogleLoading(true);
-      const response = await authClient.signIn.social({
-        provider: "github",
-        callbackURL: "/dashboard",
-      });
-      console.log(response);
-
-      if (response?.error) {
-        setMessage({
-          type: "error",
-          text: getErrorMessage(
-            response,
-            "Github sign-in failed. Please try again.",
-          ),
-        });
-      } else {
-        router.push("/dashboard");
-      }
-    } catch (error) {
-      setMessage({
-        type: "error",
-        text: error?.message || "Google sign-in failed. Please try again.",
-      });
-    } finally {
-      setIsGoogleLoading(false);
-    }
-  };
 
   const handleSignIn = async (event) => {
     event.preventDefault();
@@ -149,9 +116,7 @@ export default function LoginForm() {
     <Card className="w-full border-white/15 bg-zinc-950/80 text-white shadow-2xl shadow-black/30 backdrop-blur">
       <CardHeader className="space-y-2 pb-2 sm:space-y-3">
         <CardTitle className="text-2xl sm:text-3xl">Welcome back</CardTitle>
-        <p className="text-sm text-zinc-300">
-          Use email/password or continue with Google.
-        </p>
+        <p className="text-sm text-zinc-300">Use your email and password.</p>
       </CardHeader>
       <CardContent className="space-y-5">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -210,7 +175,7 @@ export default function LoginForm() {
               <Button
                 type="submit"
                 className="h-11 w-full bg-white text-black hover:bg-zinc-200"
-                disabled={isEmailLoading || isGoogleLoading}
+                disabled={isEmailLoading}
               >
                 {isEmailLoading ? (
                   <>
@@ -300,7 +265,7 @@ export default function LoginForm() {
               <Button
                 type="submit"
                 className="h-11 w-full bg-white text-black hover:bg-zinc-200"
-                disabled={isEmailLoading || isGoogleLoading}
+                disabled={isEmailLoading}
               >
                 {isEmailLoading ? (
                   <>
@@ -317,37 +282,6 @@ export default function LoginForm() {
             </form>
           </TabsContent>
         </Tabs>
-
-        <div className="relative py-1">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-white/15" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-zinc-950 px-2 text-zinc-400">
-              or continue with
-            </span>
-          </div>
-        </div>
-
-        <Button
-          type="button"
-          variant="outline"
-          className="h-11 w-full border-white/20 bg-white/5 text-white hover:bg-white/10"
-          onClick={handleGoogleAuth}
-          disabled={isGoogleLoading || isEmailLoading}
-        >
-          {isGoogleLoading ? (
-            <>
-              <LoaderCircle className="animate-spin" />
-              Redirecting...
-            </>
-          ) : (
-            <span className="flex items-center gap-2 text-white">
-              <FaGithub />
-              Continue with Github
-            </span>
-          )}
-        </Button>
 
         {message ? (
           <p
